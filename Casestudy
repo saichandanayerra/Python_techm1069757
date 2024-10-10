@@ -1,0 +1,116 @@
+products = []
+
+# Function to add a new product
+def add_product(p_id, name, category, price):
+    product = {
+        'p_id': p_id,
+        'name': name,
+        'category': category,
+        'price': price
+    }
+    products.append(product)
+    return f"Product {name} added successfully."
+
+# Function to update an existing product
+def update_product(p_id, name=None, category=None, price=None):
+    for product in products:
+        if product['p_id'] == p_id:
+            if name:
+                product['name'] = name
+            if category:
+                product['category'] = category
+            if price:
+                product['price'] = price
+            return f"Product {p_id} updated successfully."
+    return "Product not found."
+
+# Function to delete a product by p_id
+def delete_product(p_id):
+    global products
+    products = [product for product in products if product['p_id'] != p_id]
+    return f"Product {p_id} deleted successfully."
+
+# Function to get a product by p_id
+def get_product_by_pid(p_id):
+    for product in products:
+        if product['p_id'] == p_id:
+            return product
+    return "Product not found."
+
+# Function to get all products
+def get_all_products():
+    return products if products else "No products available."
+
+# Function to get products by category
+def get_products_by_category(category):
+    filtered_products = [product for product in products if product['category'] == category]
+    return filtered_products if filtered_products else f"No products found in category: {category}"
+
+# Function to get products between price range
+def get_products_between_prices(min_price, max_price):
+    filtered_products = [product for product in products if min_price <= product['price'] <= max_price]
+    return filtered_products if filtered_products else f"No products found between prices: {min_price} and {max_price}"
+
+# Main menu
+def menu():
+    print("\nProduct Management System")
+    print("1. Add Product")
+    print("2. Update Product")
+    print("3. Delete Product")
+    print("4. Get Product by PId")
+    print("5. Get All Products")
+    print("6. Get Products by Category")
+    print("7. Get Products Between Prices")
+    print("8. Exit")
+
+if __name__ == "__main__":
+    while True:
+        menu()
+        choice = input("Select an option (1-8): ")
+
+        if choice == '1':
+            p_id = int(input("Enter Product ID: "))
+            name = input("Enter Product Name: ")
+            category = input("Enter Product Category: ")
+            price = float(input("Enter Product Price: "))
+            print(add_product(p_id, name, category, price))
+
+        elif choice == '2':
+            p_id = int(input("Enter Product ID to update: "))
+            name = input("Enter new name (leave blank to skip): ")
+            category = input("Enter new category (leave blank to skip): ")
+            price = input("Enter new price (leave blank to skip): ")
+            price = float(price) if price else None
+            print(update_product(p_id, name if name else None, category if category else None, price))
+
+        elif choice == '3':
+            p_id = int(input("Enter Product ID to delete: "))
+            print(delete_product(p_id))
+
+        elif choice == '4':
+            p_id = int(input("Enter Product ID: "))
+            product = get_product_by_pid(p_id)
+            print(product)
+
+        elif choice == '5':
+            all_products = get_all_products()
+            print(all_products)
+
+        elif choice == '6':
+            category = input("Enter Product Category: ")
+            products_by_category = get_products_by_category(category)
+            print(products_by_category)
+
+        elif choice == '7':
+            min_price = float(input("Enter minimum price: "))
+            max_price = float(input("Enter maximum price: "))
+            products_by_price = get_products_between_prices(min_price, max_price)
+            print(products_by_price)
+
+        elif choice == '8':
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid option. Please select a valid option (1-8).")
+
